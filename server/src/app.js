@@ -1,7 +1,7 @@
-import express, { urlencoded } from 'express';
-const app = express();
 import dotenv from 'dotenv';
 dotenv.config({ path: './env' });
+import express, { urlencoded } from 'express';
+const app = express();
 const PORT = 3000 || process.env.PORT;
 import connectDB from './database/database.js';
 import cors from 'cors';
