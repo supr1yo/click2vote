@@ -26,9 +26,7 @@ app.use('/', viewPoll);
 app.use('/', votePoll);
 
 connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Running on http://localhost:${PORT}`);
-    })
+    app.listen(PORT, () =>  console.log(`Running on http://localhost:${PORT}`))
 }).catch((error) => {
     console.log(error);
 });
