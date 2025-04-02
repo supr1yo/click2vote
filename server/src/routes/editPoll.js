@@ -1,23 +1,40 @@
 import { Router } from 'express';
+import Poll from '../models/Poll.js';
+
 const router = Router();
-import Poll from '../models/Poll';
 
-router.post('/v1/edit', async (req, res, next) => {
-    const {title, options, createdAt, endAt } = req.body;
-
+router.post('/v1/edit', async (req, res) => {
     try {
-        await Poll.findOneAndUpdate({ id }, {
-            title,
-            options,
-            createdAt,
-            endAt
-        });
-        res.status(201).send({
-            message: 'Poll has been edited successfully.'
-        });
+        const pollId = req.cookies.poll;
+
+        if (!pollId) {
+            return res.status(400).json({ message: 'Poll ID is missing from cookies.' });
+        }
+
+        const { title, options, createdAt, endAt } = req.body;
+
+        if (!title || !options || !createdAt || !endAt) {
+            return res.status(400).json({ message: 'All fields are required.' });
+        }
+
+        const updatedPoll = await Poll.findOneAndUpdate(
+            { id: pollId },
+            { title, options, createdAt, endAt },
+            { new: true }
+        );
+
+        if (!updatedPoll) {
+            return res.status(404).json({ message: 'Poll not found.' });
+        }
+
+        return res.status(200).json({ message: 'Poll has been edited successfully.', updatedPoll });
+
     } catch (error) {
-        res.status(400).send({ message: 'Something went wrong.' });
-        throw new Error('Error occured while editing: ' + error);
+        console.error('Error occurred while editing poll:', error);
+
+        if (!res.headersSent) {
+            return res.status(500).json({ message: 'Something went wrong.' });
+        }
     }
 });
 
