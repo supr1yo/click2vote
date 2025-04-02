@@ -1,17 +1,30 @@
 import { Router } from 'express';
+import Poll from '../models/Poll.js';
+
 const router = Router();
-import Poll from '../models/Poll';
 
-router.post('/v1/delete', async (req, res, next) => {
-    const { id } = req.body;
-    if (!id) return res.status(400).send({ message: 'Badly formatted request.' });
-
+router.post('/v1/delete', async (req, res) => {
     try {
+        const { id } = req.body;
+
+        if (!id) {
+            return res.status(400).json({ message: 'Poll ID is required.' });
+        }
+
         const pollData = await Poll.findOne({ id });
-        res.status(201).send({ data: pollData });
+
+        if (!pollData) {
+            return res.status(404).json({ message: 'Poll not found.' });
+        }
+
+        return res.status(200).json({ pollData });
+
     } catch (error) {
-        res.status(400).send({ message: 'Something went wrong.' });
-        throw new Error('Error occured while editing: ' + error);
+        console.error('Error occurred while displaying poll:', error);
+
+        if (!res.headersSent) {
+            return res.status(500).json({ message: 'Something went wrong.' });
+        }
     }
 });
 
