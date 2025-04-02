@@ -1,5 +1,8 @@
-const mongoose = require('mongoose');
-const { DB_NAME } = require('../util/constants');
+import mongoose from 'mongoose';
+import { DB_NAME } from '../util/constants.js';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -11,7 +14,7 @@ if (!DB_NAME) {
   throw new Error('Please define the DB_NAME in the constants file.');
 }
 
-const database = async () => {
+const connectDB = async () => {
   try {
     await mongoose.connect(`${MONGODB_URI}/${DB_NAME}?retryWrites=true&w=majority`, {
       bufferCommands: false,
@@ -19,9 +22,9 @@ const database = async () => {
 
     console.log('Connected to MongoDB.');
   } catch (error) {
-    console.error('MongoDB connection error:', error);
+    console.error('MongoDB connection FAILED:', error);
     process.exit(1);
   }
 };
 
-module.exports = database;
+export default connectDB;
