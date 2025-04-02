@@ -1,3 +1,1 @@
-module.exports = {
-    DB_NAME: 'click2vote'
-}
+export const DB_NAME = 'click2vote';

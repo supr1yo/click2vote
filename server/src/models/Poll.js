@@ -1,14 +1,17 @@
-const mongoose = require('mongoose');
-const { Schema, model } = mongoose;
+import { Schema, model } from 'mongoose';
 
 const pollSchema = new Schema({
+    id: {
+        type: Number,
+        required: true,
+    },
     title: {
         type: String,
         unique: true,
         required: true,
     },
     options: [{
-        name: { type: String, required: true },
+        name: { type: String, unique: true, required: true },
         count: { type: Number, default: 0 }
     }],
     createdAt: {
@@ -23,4 +26,4 @@ const pollSchema = new Schema({
 });
 
 const Poll = model('Poll', pollSchema);
-module.exports = Poll;
+export default Poll;
