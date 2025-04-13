@@ -11,15 +11,15 @@ router.post('/v1/edit', async (req, res) => {
             return res.status(400).json({ message: 'Poll ID is missing from cookies.' });
         }
 
-        const { title, options, createdAt, endAt } = req.body;
+        const { title, options, startTime, endTime } = req.body;
 
-        if (!title || !options || !createdAt || !endAt) {
+        if (!title || !options || !startTime || !endTime) {
             return res.status(400).json({ message: 'All fields are required.' });
         }
 
         const updatedPoll = await Poll.findOneAndUpdate(
             { id: pollId },
-            { title, options, createdAt, endAt },
+            { title, options, startTime, endTime },
             { new: true }
         );
 

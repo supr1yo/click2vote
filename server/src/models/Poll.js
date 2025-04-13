@@ -14,12 +14,12 @@ const pollSchema = new Schema({
         name: { type: String, unique: true, required: true },
         count: { type: Number, default: 0 }
     }],
-    createdAt: {
+    startTime: {
         type: Date,
         required: true,
         default: Date.now
     },
-    endAt: {
+    endTime: {
         type: Date,
         required: true,
     }
